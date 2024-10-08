@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args: 
+        - NEXT_PUBLIC_BACKEND_URL=http://<target_ip>:4200/api
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SERVER_PORT=4200
+      - SPRING_MAIN_WEB-APPLICATION-TYPE=reactive
+      - SPRING_WEBFLUX_URL-MATCHING_STRICTONLY=false
